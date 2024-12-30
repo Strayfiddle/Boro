@@ -1,0 +1,354 @@
+{
+	"name": "Test_1",
+	"properties": {
+		"nbformat": 4,
+		"nbformat_minor": 2,
+		"bigDataPool": {
+			"referenceName": "test",
+			"type": "BigDataPoolReference"
+		},
+		"sessionProperties": {
+			"driverMemory": "28g",
+			"driverCores": 4,
+			"executorMemory": "28g",
+			"executorCores": 4,
+			"numExecutors": 2,
+			"runAsWorkspaceSystemIdentity": false,
+			"conf": {
+				"spark.dynamicAllocation.enabled": "false",
+				"spark.dynamicAllocation.minExecutors": "2",
+				"spark.dynamicAllocation.maxExecutors": "2",
+				"spark.autotune.trackingId": "0e6cfc83-e8dd-4a55-9803-7c1d1515a973"
+			}
+		},
+		"metadata": {
+			"saveOutput": true,
+			"enableDebugMode": false,
+			"language_info": {
+				"name": "python"
+			},
+			"a365ComputeOptions": {
+				"id": "/subscriptions/d3239a8e-9a35-4de9-986f-a84d62569e9e/resourceGroups/demo/providers/Microsoft.Synapse/workspaces/venky1998/bigDataPools/test",
+				"name": "test",
+				"type": "Spark",
+				"endpoint": "https://venky1998.dev.azuresynapse.net/livyApi/versions/2019-11-01-preview/sparkPools/test",
+				"auth": {
+					"type": "AAD",
+					"authResource": "https://dev.azuresynapse.net",
+					"authHeader": null
+				},
+				"sparkVersion": "3.4",
+				"nodeCount": 10,
+				"cores": 4,
+				"memory": 28,
+				"extraHeader": null
+			},
+			"sessionKeepAliveTimeout": 30
+		},
+		"cells": [
+			{
+				"cell_type": "code",
+				"source": [
+					"df = spark.read.load('abfss://demo@vramakrishnan.dfs.core.windows.net/taxi_zone.csv', format='csv', header = True)"
+				],
+				"execution_count": 1
+			},
+			{
+				"cell_type": "code",
+				"metadata": {
+					"jupyter": {
+						"source_hidden": false,
+						"outputs_hidden": false
+					},
+					"nteract": {
+						"transient": {
+							"deleting": false
+						}
+					},
+					"collapsed": false
+				},
+				"source": [
+					"# Top 10\r\n",
+					"display(df))"
+				],
+				"execution_count": 3
+			},
+			{
+				"cell_type": "code",
+				"metadata": {
+					"jupyter": {
+						"source_hidden": false,
+						"outputs_hidden": false
+					},
+					"nteract": {
+						"transient": {
+							"deleting": false
+						}
+					},
+					"collapsed": false
+				},
+				"source": [
+					"display(df.filter(df.Borough == \"Manhattan\"))"
+				],
+				"execution_count": 4
+			},
+			{
+				"cell_type": "code",
+				"metadata": {
+					"jupyter": {
+						"source_hidden": false,
+						"outputs_hidden": false
+					},
+					"nteract": {
+						"transient": {
+							"deleting": false
+						}
+					},
+					"collapsed": false
+				},
+				"source": [
+					"display(df)"
+				],
+				"execution_count": 5
+			},
+			{
+				"cell_type": "code",
+				"metadata": {
+					"jupyter": {
+						"source_hidden": false,
+						"outputs_hidden": false
+					},
+					"nteract": {
+						"transient": {
+							"deleting": false
+						}
+					},
+					"collapsed": false
+				},
+				"source": [
+					"display(df.groupBy(\"Borough\").count())"
+				],
+				"execution_count": 8
+			},
+			{
+				"cell_type": "code",
+				"metadata": {
+					"jupyter": {
+						"source_hidden": false,
+						"outputs_hidden": false
+					},
+					"nteract": {
+						"transient": {
+							"deleting": false
+						}
+					},
+					"collapsed": false
+				},
+				"source": [
+					"df1 =  df.groupBy(\"Zone\") and df.filter(df.Borough == 'Manhattan')\r\n",
+					"display(df1)"
+				],
+				"execution_count": 29
+			},
+			{
+				"cell_type": "code",
+				"metadata": {
+					"jupyter": {
+						"source_hidden": false,
+						"outputs_hidden": false
+					},
+					"nteract": {
+						"transient": {
+							"deleting": false
+						}
+					},
+					"collapsed": false
+				},
+				"source": [
+					"display(df1.groupBy(\"service_zone\").count())"
+				],
+				"execution_count": 32
+			},
+			{
+				"cell_type": "code",
+				"metadata": {
+					"jupyter": {
+						"source_hidden": false,
+						"outputs_hidden": false
+					},
+					"nteract": {
+						"transient": {
+							"deleting": false
+						}
+					},
+					"collapsed": false
+				},
+				"source": [
+					"display(df.groupBy(\"service_zone\").count())"
+				],
+				"execution_count": 34
+			},
+			{
+				"cell_type": "code",
+				"metadata": {
+					"jupyter": {
+						"source_hidden": false,
+						"outputs_hidden": false
+					},
+					"nteract": {
+						"transient": {
+							"deleting": false
+						}
+					},
+					"collapsed": false
+				},
+				"source": [
+					"df2 = (df.filter(df.service_zone == 'Boro Zone') and df.groupBy(\"Borough\").count())\r\n",
+					"display(df2)"
+				],
+				"execution_count": 50
+			},
+			{
+				"cell_type": "code",
+				"metadata": {
+					"jupyter": {
+						"source_hidden": false,
+						"outputs_hidden": false
+					},
+					"nteract": {
+						"transient": {
+							"deleting": false
+						}
+					}
+				},
+				"source": [
+					"# Bottom 5\r\n",
+					"df = spark.read.load(\"abfss://demo@vramakrishnan.dfs.core.windows.net/taxi_zone.csv\",format=(\"csv\"),header=True)\r\n",
+					"\r\n",
+					"df.tail(num= 5)"
+				],
+				"execution_count": 20
+			},
+			{
+				"cell_type": "code",
+				"metadata": {
+					"jupyter": {
+						"source_hidden": false,
+						"outputs_hidden": false
+					},
+					"nteract": {
+						"transient": {
+							"deleting": false
+						}
+					}
+				},
+				"source": [
+					"# Top 5\r\n",
+					"df.head(n = 5)"
+				],
+				"execution_count": 21
+			},
+			{
+				"cell_type": "code",
+				"metadata": {
+					"jupyter": {
+						"source_hidden": false,
+						"outputs_hidden": false
+					},
+					"nteract": {
+						"transient": {
+							"deleting": false
+						}
+					}
+				},
+				"source": [
+					"df2 = (df.filter(df.service_zone == 'Boro Zone') and df.groupBy(\"Borough\").count())\r\n",
+					"df2.write.csv(\"abfss://demo@vramakrishnan.dfs.core.windows.net/Boro\", header = True)"
+				],
+				"execution_count": 49
+			},
+			{
+				"cell_type": "code",
+				"metadata": {
+					"jupyter": {
+						"source_hidden": false,
+						"outputs_hidden": false
+					},
+					"nteract": {
+						"transient": {
+							"deleting": false
+						}
+					}
+				},
+				"source": [
+					"# Reading CSV file\r\n",
+					"df = spark.read.load(\"abfss://demo@vramakrishnan.dfs.core.windows.net/taxi_zone.csv\",format=(\"csv\"),header=True)\r\n",
+					"# Filtering based on service zone and grouping by Borough\r\n",
+					"df2 = (df.filter(df.service_zone == 'Boro Zone') and df.groupBy(\"Borough\").count())\r\n",
+					"# writing df2 to filesystem \r\n",
+					"df2.write.csv(\"abfss://demo@vramakrishnan.dfs.core.windows.net/Boro\", header = True)\r\n",
+					"\r\n",
+					"path = \"abfss://demo@vramakrishnan.dfs.core.windows.net/Boro\"\r\n",
+					"source_path = \"abfss://demo@vramakrishnan.dfs.core.windows.net/Boro/part-00000-6ddcce85-1daf-456b-ae2d-369fc63e5e10-c000.csv\"\r\n",
+					"dest_path = \"abfss://demo@vramakrishnan.dfs.core.windows.net/Test/Borozone_count.csv\"\r\n",
+					"\r\n",
+					"# listing file items\r\n",
+					"mssparkutils.fs.ls(path)\r\n",
+					"# copying df2 to destinantion\r\n",
+					"mssparkutils.fs.cp(source_path,dest_path)\r\n",
+					"# removing the source(recurse is true to delete non empty dir)\r\n",
+					"mssparkutils.fs.rm(path, recurse=True)"
+				],
+				"execution_count": 56
+			},
+			{
+				"cell_type": "code",
+				"metadata": {
+					"jupyter": {
+						"source_hidden": false,
+						"outputs_hidden": false
+					},
+					"nteract": {
+						"transient": {
+							"deleting": false
+						}
+					},
+					"collapsed": false
+				},
+				"source": [
+					"# for reading txt file (with pipe delimiter)\r\n",
+					"df3 = spark.read.option(\"header\", \"true\")\\\r\n",
+					"                .option(\"delimiter\",\"\\t\")\\\r\n",
+					"                .option(\"inferschema\", \"true\")\\\r\n",
+					"                .csv(\"abfss://demo@vramakrishnan.dfs.core.windows.net/taxi_zone_note.txt\")\r\n",
+					"display(df3)"
+				],
+				"execution_count": 100
+			},
+			{
+				"cell_type": "code",
+				"metadata": {
+					"jupyter": {
+						"source_hidden": false,
+						"outputs_hidden": false
+					},
+					"nteract": {
+						"transient": {
+							"deleting": false
+						}
+					}
+				},
+				"source": [
+					"# reading txt file using pipe delimiter\r\n",
+					"df4 = spark.read.option(\"header\",\"true\")\\\r\n",
+					"                .option(\"delimiter\",\"|\")\\\r\n",
+					"                .option(\"inferschema\",\"true\")\\\r\n",
+					"                .csv(\"abfss://demo@vramakrishnan.dfs.core.windows.net/taxi_zone_note_pipe.txt\")\r\n",
+					"\r\n",
+					"df4.show()"
+				],
+				"execution_count": 103
+			}
+		]
+	}
+}

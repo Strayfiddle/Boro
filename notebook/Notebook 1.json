@@ -1,0 +1,242 @@
+{
+	"name": "Notebook 1",
+	"properties": {
+		"nbformat": 4,
+		"nbformat_minor": 2,
+		"bigDataPool": {
+			"referenceName": "test",
+			"type": "BigDataPoolReference"
+		},
+		"sessionProperties": {
+			"driverMemory": "28g",
+			"driverCores": 4,
+			"executorMemory": "28g",
+			"executorCores": 4,
+			"numExecutors": 2,
+			"runAsWorkspaceSystemIdentity": false,
+			"conf": {
+				"spark.dynamicAllocation.enabled": "false",
+				"spark.dynamicAllocation.minExecutors": "2",
+				"spark.dynamicAllocation.maxExecutors": "2",
+				"spark.autotune.trackingId": "58287b4f-a47d-44c8-9ea9-02dffa140d76"
+			}
+		},
+		"metadata": {
+			"saveOutput": true,
+			"enableDebugMode": false,
+			"language_info": {
+				"name": "python"
+			},
+			"a365ComputeOptions": {
+				"id": "/subscriptions/d3239a8e-9a35-4de9-986f-a84d62569e9e/resourceGroups/demo/providers/Microsoft.Synapse/workspaces/venky1998/bigDataPools/test",
+				"name": "test",
+				"type": "Spark",
+				"endpoint": "https://venky1998.dev.azuresynapse.net/livyApi/versions/2019-11-01-preview/sparkPools/test",
+				"auth": {
+					"type": "AAD",
+					"authResource": "https://dev.azuresynapse.net",
+					"authHeader": null
+				},
+				"sparkVersion": "3.4",
+				"nodeCount": 10,
+				"cores": 4,
+				"memory": 28,
+				"extraHeader": null
+			},
+			"sessionKeepAliveTimeout": 30
+		},
+		"cells": [
+			{
+				"cell_type": "code",
+				"metadata": {
+					"microsoft": {
+						"language": "python"
+					},
+					"collapsed": false
+				},
+				"source": [
+					"%%pyspark\n",
+					"blob_account_name = \"vramakrishnan\"\n",
+					"blob_container_name = \"demofs\"\n",
+					"from pyspark.sql import SparkSession\n",
+					"\n",
+					"sc = SparkSession.builder.getOrCreate()\n",
+					"token_library = sc._jvm.com.microsoft.azure.synapse.tokenlibrary.TokenLibrary\n",
+					"blob_sas_token = token_library.getConnectionString(\"AzureBlobStorage1\")\n",
+					"\n",
+					"spark.conf.set(\n",
+					"    'fs.azure.sas.%s.%s.blob.core.windows.net' % (blob_container_name, blob_account_name),\n",
+					"    blob_sas_token)\r\n",
+					"df = spark.read.load('wasbs://demofs@vramakrishnan.blob.core.windows.net/GDT_Salary.csv', format='csv'\r\n",
+					"## If header exists uncomment line below\r\n",
+					"##, header=True\r\n",
+					")\r\n",
+					"display(df.limit(10))"
+				],
+				"execution_count": 21
+			},
+			{
+				"cell_type": "code",
+				"metadata": {
+					"jupyter": {
+						"source_hidden": false,
+						"outputs_hidden": false
+					},
+					"nteract": {
+						"transient": {
+							"deleting": false
+						}
+					},
+					"collapsed": false
+				},
+				"source": [
+					"df = df.withColumnRenamed(\"_c0\",\"Sl.No\")\\\r\n",
+					".withColumnRenamed(\"_c1\",\"Name\")\\\r\n",
+					".withColumnRenamed(\"_c2\",\"Department\")\\\r\n",
+					".withColumnRenamed(\"_c3\",\"Age\")\\\r\n",
+					".withColumnRenamed(\"_c4\",\"Salary\")\r\n",
+					"\r\n",
+					"display(df)"
+				],
+				"execution_count": 24
+			},
+			{
+				"cell_type": "code",
+				"metadata": {
+					"jupyter": {
+						"source_hidden": false,
+						"outputs_hidden": false
+					},
+					"nteract": {
+						"transient": {
+							"deleting": false
+						}
+					},
+					"collapsed": false
+				},
+				"source": [
+					"df_filtered = df.filter(df.Age!= \"Age\")\r\n",
+					"display(df_filtered)"
+				],
+				"execution_count": 26
+			},
+			{
+				"cell_type": "code",
+				"metadata": {
+					"jupyter": {
+						"source_hidden": false,
+						"outputs_hidden": false
+					},
+					"nteract": {
+						"transient": {
+							"deleting": false
+						}
+					},
+					"collapsed": false
+				},
+				"source": [
+					"display(df.filter(df.Salary >= 1000000))"
+				],
+				"execution_count": 30
+			},
+			{
+				"cell_type": "code",
+				"metadata": {
+					"jupyter": {
+						"source_hidden": false,
+						"outputs_hidden": false
+					},
+					"nteract": {
+						"transient": {
+							"deleting": false
+						}
+					},
+					"collapsed": false
+				},
+				"source": [
+					"df_avg = df.agg({'Salary' : 'avg',\r\n",
+					"'Age' : 'avg'})\r\n",
+					"display(df_avg)"
+				],
+				"execution_count": 34
+			},
+			{
+				"cell_type": "code",
+				"metadata": {
+					"jupyter": {
+						"source_hidden": false,
+						"outputs_hidden": false
+					},
+					"nteract": {
+						"transient": {
+							"deleting": false
+						}
+					}
+				},
+				"source": [
+					""
+				],
+				"execution_count": 39
+			},
+			{
+				"cell_type": "code",
+				"metadata": {
+					"jupyter": {
+						"source_hidden": false,
+						"outputs_hidden": false
+					},
+					"nteract": {
+						"transient": {
+							"deleting": false
+						}
+					},
+					"collapsed": false
+				},
+				"source": [
+					"df_sum = df.agg({'Salary' : 'sum'})\r\n",
+					"display(df_sum)"
+				],
+				"execution_count": 44
+			},
+			{
+				"cell_type": "code",
+				"metadata": {
+					"jupyter": {
+						"source_hidden": false,
+						"outputs_hidden": false
+					},
+					"nteract": {
+						"transient": {
+							"deleting": false
+						}
+					}
+				},
+				"source": [
+					"df.withColumn(df.Salary.cast(DecimalType(18, 2)))"
+				],
+				"execution_count": 49
+			},
+			{
+				"cell_type": "code",
+				"metadata": {
+					"jupyter": {
+						"source_hidden": false,
+						"outputs_hidden": false
+					},
+					"nteract": {
+						"transient": {
+							"deleting": false
+						}
+					}
+				},
+				"source": [
+					"from pyspark.sql.functions import when\r\n",
+					"df.show()\r\n",
+					"df.withColumn(\"Name\", when(df.Name == \"Venkatesh Ramakrishnan\", \"Venkatesh\"))\r\n",
+					"df.show()"
+				],
+				"execution_count": 58
+			}
+		]
+	}
+}
