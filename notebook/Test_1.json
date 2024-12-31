@@ -18,12 +18,16 @@
 				"spark.dynamicAllocation.enabled": "false",
 				"spark.dynamicAllocation.minExecutors": "2",
 				"spark.dynamicAllocation.maxExecutors": "2",
-				"spark.autotune.trackingId": "0e6cfc83-e8dd-4a55-9803-7c1d1515a973"
+				"spark.autotune.trackingId": "cf82fb62-e7a1-46b1-b375-163aef3e90e5"
 			}
 		},
 		"metadata": {
 			"saveOutput": true,
 			"enableDebugMode": false,
+			"kernelspec": {
+				"name": "synapse_pyspark",
+				"display_name": "Synapse PySpark"
+			},
 			"language_info": {
 				"name": "python"
 			},
@@ -34,14 +38,13 @@
 				"endpoint": "https://venky1998.dev.azuresynapse.net/livyApi/versions/2019-11-01-preview/sparkPools/test",
 				"auth": {
 					"type": "AAD",
-					"authResource": "https://dev.azuresynapse.net",
-					"authHeader": null
+					"authResource": "https://dev.azuresynapse.net"
 				},
 				"sparkVersion": "3.4",
 				"nodeCount": 10,
 				"cores": 4,
 				"memory": 28,
-				"extraHeader": null
+				"automaticScaleJobs": false
 			},
 			"sessionKeepAliveTimeout": 30
 		},
@@ -227,7 +230,7 @@
 					"\r\n",
 					"df.tail(num= 5)"
 				],
-				"execution_count": 20
+				"execution_count": 6
 			},
 			{
 				"cell_type": "code",
@@ -246,7 +249,7 @@
 					"# Top 5\r\n",
 					"df.head(n = 5)"
 				],
-				"execution_count": 21
+				"execution_count": 7
 			},
 			{
 				"cell_type": "code",
@@ -286,10 +289,10 @@
 					"# Filtering based on service zone and grouping by Borough\r\n",
 					"df2 = (df.filter(df.service_zone == 'Boro Zone') and df.groupBy(\"Borough\").count())\r\n",
 					"# writing df2 to filesystem \r\n",
-					"df2.write.csv(\"abfss://demo@vramakrishnan.dfs.core.windows.net/Boro\", header = True)\r\n",
+					"# df2.write.csv(\"abfss://demo@vramakrishnan.dfs.core.windows.net/Boro\", header = True)\r\n",
 					"\r\n",
 					"path = \"abfss://demo@vramakrishnan.dfs.core.windows.net/Boro\"\r\n",
-					"source_path = \"abfss://demo@vramakrishnan.dfs.core.windows.net/Boro/part-00000-6ddcce85-1daf-456b-ae2d-369fc63e5e10-c000.csv\"\r\n",
+					"source_path = \"abfss://demo@vramakrishnan.dfs.core.windows.net/Boro/part-00000-c6731997-7962-4bc2-8370-d8b06644d9e5-c000.csv\"\r\n",
 					"dest_path = \"abfss://demo@vramakrishnan.dfs.core.windows.net/Test/Borozone_count.csv\"\r\n",
 					"\r\n",
 					"# listing file items\r\n",
@@ -299,7 +302,7 @@
 					"# removing the source(recurse is true to delete non empty dir)\r\n",
 					"mssparkutils.fs.rm(path, recurse=True)"
 				],
-				"execution_count": 56
+				"execution_count": 3
 			},
 			{
 				"cell_type": "code",
@@ -323,7 +326,7 @@
 					"                .csv(\"abfss://demo@vramakrishnan.dfs.core.windows.net/taxi_zone_note.txt\")\r\n",
 					"display(df3)"
 				],
-				"execution_count": 100
+				"execution_count": 4
 			},
 			{
 				"cell_type": "code",
@@ -347,7 +350,29 @@
 					"\r\n",
 					"df4.show()"
 				],
-				"execution_count": 103
+				"execution_count": 5
+			},
+			{
+				"cell_type": "code",
+				"metadata": {
+					"jupyter": {
+						"source_hidden": false,
+						"outputs_hidden": false
+					},
+					"nteract": {
+						"transient": {
+							"deleting": false
+						}
+					}
+				},
+				"source": [
+					"# df5 = spark.read.format(\"com.crealytics.spark.excel\") \\\r\n",
+					"#     .option(\"header\", \"true\") \\\r\n",
+					"#     .option(\"inferSchema\", \"true\") \\\r\n",
+					"#     .load(\"abfss://demo@vramakrishnan.dfs.core.windows.net/taxi_zone_3.xlsx\")\r\n",
+					""
+				],
+				"execution_count": 8
 			}
 		]
 	}
