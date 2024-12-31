@@ -18,7 +18,7 @@
 				"spark.dynamicAllocation.enabled": "false",
 				"spark.dynamicAllocation.minExecutors": "2",
 				"spark.dynamicAllocation.maxExecutors": "2",
-				"spark.autotune.trackingId": "2e1ed981-9068-485f-a3eb-3204535c28d0"
+				"spark.autotune.trackingId": "e8e75c44-15b2-481a-b0d0-75c63a152722"
 			}
 		},
 		"metadata": {
@@ -368,13 +368,13 @@
 					}
 				},
 				"source": [
-					"# df5 = spark.read.format(\"com.crealytics.spark.excel\") \\\r\n",
-					"#     .option(\"header\", \"true\") \\\r\n",
-					"#     .option(\"inferSchema\", \"true\") \\\r\n",
-					"#     .load(\"abfss://demo@vramakrishnan.dfs.core.windows.net/taxi_zone_3.xlsx\")\r\n",
+					"df5 = spark.read.format(\"com.crealytics.spark.excel\") \\\r\n",
+					"    .option(\"header\", \"true\") \\\r\n",
+					"    .option(\"inferSchema\", \"true\") \\\r\n",
+					"    .load(\"abfss://demo@vramakrishnan.dfs.core.windows.net/taxi_zone_3.xlsx\")\r\n",
 					""
 				],
-				"execution_count": 8
+				"execution_count": null
 			}
 		]
 	}
