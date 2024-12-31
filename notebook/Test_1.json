@@ -18,7 +18,7 @@
 				"spark.dynamicAllocation.enabled": "false",
 				"spark.dynamicAllocation.minExecutors": "2",
 				"spark.dynamicAllocation.maxExecutors": "2",
-				"spark.autotune.trackingId": "cf82fb62-e7a1-46b1-b375-163aef3e90e5"
+				"spark.autotune.trackingId": "2e1ed981-9068-485f-a3eb-3204535c28d0"
 			}
 		},
 		"metadata": {
@@ -230,7 +230,7 @@
 					"\r\n",
 					"df.tail(num= 5)"
 				],
-				"execution_count": 6
+				"execution_count": 9
 			},
 			{
 				"cell_type": "code",
@@ -243,13 +243,15 @@
 						"transient": {
 							"deleting": false
 						}
-					}
+					},
+					"collapsed": false
 				},
 				"source": [
 					"# Top 5\r\n",
-					"df.head(n = 5)"
+					"#df.head(n = 5)\r\n",
+					"display(df.head(10))"
 				],
-				"execution_count": 7
+				"execution_count": 11
 			},
 			{
 				"cell_type": "code",
