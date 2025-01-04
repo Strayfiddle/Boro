@@ -1,5 +1,5 @@
 {
-	"name": "Notebook 2",
+	"name": "Jan21",
 	"properties": {
 		"folder": {
 			"name": "Practise"
@@ -20,7 +20,7 @@
 				"spark.dynamicAllocation.enabled": "false",
 				"spark.dynamicAllocation.minExecutors": "2",
 				"spark.dynamicAllocation.maxExecutors": "2",
-				"spark.autotune.trackingId": "dc418f29-41af-49e8-8518-dc19900162d2"
+				"spark.autotune.trackingId": "f9d65cc3-15c6-4ab7-8228-932cad6ab0fb"
 			}
 		},
 		"metadata": {
@@ -57,7 +57,7 @@
 					"from pyspark.sql import SparkSession\r\n",
 					"from pyspark.sql import functions as F"
 				],
-				"execution_count": 59
+				"execution_count": 134
 			},
 			{
 				"cell_type": "code",
@@ -77,10 +77,40 @@
 				},
 				"source": [
 					"source_path = \"abfss://demo@vramakrishnan.dfs.core.windows.net/New/green_tripdata_2021-01.csv\"\r\n",
-					"path = \"\"\r\n",
-					"dest_path = \"\""
+					"path = \"abfss://demo@vramakrishnan.dfs.core.windows.net/New/project\"\r\n",
+					"dest_path = \"abfss://demo@vramakrishnan.dfs.core.windows.net/New/Total_tips_J21.csv\""
 				],
-				"execution_count": null
+				"execution_count": 135
+			},
+			{
+				"cell_type": "code",
+				"metadata": {
+					"jupyter": {
+						"source_hidden": false,
+						"outputs_hidden": false
+					},
+					"nteract": {
+						"transient": {
+							"deleting": false
+						}
+					}
+				},
+				"source": [
+					"# df1 = df.dropna(subset=['tip_amount'])\r\n",
+					"# df1 = df.withColumn('tip_amount', df['tip_amount'].cast('float'))\r\n",
+					"\r\n",
+					"# df_invalid = df.filter(F.col('VendorID').isNull())\r\n",
+					"# display(df_invalid)\r\n",
+					"# df = df.withColumn('VendorID',\r\n",
+					"#         F.when(F.col('VendorID') == 'undefined', None)\r\n",
+					"#                 .otherwise(F.col('VendorID')))\r\n",
+					"# df_invalid = df.filter(F.col('VendorID').isNull())\r\n",
+					"\r\n",
+					"# display(df_invalid.agg(F.sum('tip_amount').alias('Total_tip_amount')))\r\n",
+					"# display(df.filter(df.VendorID == None))\r\n",
+					"# display(df.filter(df.VendorID == 3))"
+				],
+				"execution_count": 136
 			},
 			{
 				"cell_type": "code",
@@ -98,12 +128,11 @@
 				},
 				"source": [
 					"df = spark.read.load(source_path,format = \"csv\", header = True)\r\n",
-					"#display(df)\r\n",
-					"# df.withColumn('tip_amount',df['tip_amount'].cast('float'))\r\n",
-					"df1 = df.agg(F.sum('trip_type').alias('total_trip_type')) # total tips based on VendorID\r\n",
-					"display(df1)"
+					"df = df.fillna({'VendorID':3}) # Replacing null values to 3 \r\n",
+					"Jan21 = df.groupBy(\"VendorID\").agg(F.sum('tip_amount').alias('Total_tip_amount')) # total tips based on VendorID\r\n",
+					""
 				],
-				"execution_count": null
+				"execution_count": 137
 			},
 			{
 				"cell_type": "code",
@@ -120,9 +149,16 @@
 					"collapsed": false
 				},
 				"source": [
-					"display(df)"
+					"Jan21.write.csv(path,header= True) \r\n",
+					"input_path = mssparkutils.fs.ls(path)\r\n",
+					"for path_info in input_path:\r\n",
+					"    out_path = path_info.path\r\n",
+					"\r\n",
+					"    if out_path.endswith(\".csv\"):\r\n",
+					"        mssparkutils.fs.cp(out_path,dest_path)\r\n",
+					"        mssparkutils.fs.rm(path,recurse=True)"
 				],
-				"execution_count": null
+				"execution_count": 138
 			}
 		]
 	}
