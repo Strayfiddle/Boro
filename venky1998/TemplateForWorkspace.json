@@ -371,6 +371,143 @@
 			"dependsOn": []
 		},
 		{
+			"name": "[concat(parameters('workspaceName'), '/Notebook 2')]",
+			"type": "Microsoft.Synapse/workspaces/notebooks",
+			"apiVersion": "2019-06-01-preview",
+			"properties": {
+				"folder": {
+					"name": "Practise"
+				},
+				"nbformat": 4,
+				"nbformat_minor": 2,
+				"bigDataPool": {
+					"referenceName": "test",
+					"type": "BigDataPoolReference"
+				},
+				"sessionProperties": {
+					"driverMemory": "28g",
+					"driverCores": 4,
+					"executorMemory": "28g",
+					"executorCores": 4,
+					"numExecutors": 2,
+					"conf": {
+						"spark.dynamicAllocation.enabled": "false",
+						"spark.dynamicAllocation.minExecutors": "2",
+						"spark.dynamicAllocation.maxExecutors": "2",
+						"spark.autotune.trackingId": "c5aca55f-fa01-4000-8568-2033c2c4af6b"
+					}
+				},
+				"metadata": {
+					"saveOutput": true,
+					"enableDebugMode": false,
+					"kernelspec": {
+						"name": "synapse_pyspark",
+						"display_name": "Synapse PySpark"
+					},
+					"language_info": {
+						"name": "python"
+					},
+					"a365ComputeOptions": {
+						"id": "/subscriptions/d3239a8e-9a35-4de9-986f-a84d62569e9e/resourceGroups/demo/providers/Microsoft.Synapse/workspaces/venky1998/bigDataPools/test",
+						"name": "test",
+						"type": "Spark",
+						"endpoint": "https://venky1998.dev.azuresynapse.net/livyApi/versions/2019-11-01-preview/sparkPools/test",
+						"auth": {
+							"type": "AAD",
+							"authResource": "https://dev.azuresynapse.net"
+						},
+						"sparkVersion": "3.4",
+						"nodeCount": 10,
+						"cores": 4,
+						"memory": 28,
+						"automaticScaleJobs": false
+					},
+					"sessionKeepAliveTimeout": 30
+				},
+				"cells": [
+					{
+						"cell_type": "code",
+						"metadata": {},
+						"source": [
+							"from pyspark.sql import SparkSession\r\n",
+							"from pyspark.sql import functions as F"
+						],
+						"outputs": [],
+						"execution_count": 59
+					},
+					{
+						"cell_type": "code",
+						"metadata": {
+							"jupyter": {
+								"source_hidden": false,
+								"outputs_hidden": false
+							},
+							"nteract": {
+								"transient": {
+									"deleting": false
+								}
+							},
+							"tags": [
+								"parameters"
+							]
+						},
+						"source": [
+							"source_path = \"abfss://demo@vramakrishnan.dfs.core.windows.net/New/green_tripdata_2021-01.csv\"\r\n",
+							"path = \"\"\r\n",
+							"dest_path = \"\""
+						],
+						"outputs": [],
+						"execution_count": null
+					},
+					{
+						"cell_type": "code",
+						"metadata": {
+							"jupyter": {
+								"source_hidden": false,
+								"outputs_hidden": false
+							},
+							"nteract": {
+								"transient": {
+									"deleting": false
+								}
+							},
+							"collapsed": false
+						},
+						"source": [
+							"df = spark.read.load(source_path,format = \"csv\", header = True)\r\n",
+							"#display(df)\r\n",
+							"# df.withColumn('tip_amount',df['tip_amount'].cast('float'))\r\n",
+							"df1 = df.agg(F.sum('trip_type').alias('total_trip_type')) # total tips based on VendorID\r\n",
+							"display(df1)"
+						],
+						"outputs": [],
+						"execution_count": null
+					},
+					{
+						"cell_type": "code",
+						"metadata": {
+							"jupyter": {
+								"source_hidden": false,
+								"outputs_hidden": false
+							},
+							"nteract": {
+								"transient": {
+									"deleting": false
+								}
+							},
+							"collapsed": false
+						},
+						"source": [
+							"display(df)"
+						],
+						"outputs": [],
+						"execution_count": null
+					}
+				]
+			},
+			"dependsOn": []
+		},
+		{
 			"name": "[concat(parameters('workspaceName'), '/Test_1')]",
 			"type": "Microsoft.Synapse/workspaces/notebooks",
 			"apiVersion": "2019-06-01-preview",
@@ -392,7 +529,7 @@
 						"spark.dynamicAllocation.enabled": "false",
 						"spark.dynamicAllocation.minExecutors": "2",
 						"spark.dynamicAllocation.maxExecutors": "2",
-						"spark.autotune.trackingId": "2e1ed981-9068-485f-a3eb-3204535c28d0"
+						"spark.autotune.trackingId": "1a27112b-b9a6-4c2e-a7d2-2618c8e2d7f0"
 					}
 				},
 				"metadata": {
@@ -428,7 +565,7 @@
 							"df = spark.read.load('abfss://demo@vramakrishnan.dfs.core.windows.net/taxi_zone.csv', format='csv', header = True)"
 						],
 						"outputs": [],
-						"execution_count": 1
+						"execution_count": 37
 					},
 					{
 						"cell_type": "code",
@@ -449,7 +586,7 @@
 							"display(df))"
 						],
 						"outputs": [],
-						"execution_count": 3
+						"execution_count": 39
 					},
 					{
 						"cell_type": "code",
@@ -469,7 +606,7 @@
 							"display(df.filter(df.Borough == \"Manhattan\"))"
 						],
 						"outputs": [],
-						"execution_count": 4
+						"execution_count": 40
 					},
 					{
 						"cell_type": "code",
@@ -489,7 +626,7 @@
 							"display(df)"
 						],
 						"outputs": [],
-						"execution_count": 5
+						"execution_count": 41
 					},
 					{
 						"cell_type": "code",
@@ -509,7 +646,7 @@
 							"display(df.groupBy(\"Borough\").count())"
 						],
 						"outputs": [],
-						"execution_count": 8
+						"execution_count": 42
 					},
 					{
 						"cell_type": "code",
@@ -530,7 +667,7 @@
 							"display(df1)"
 						],
 						"outputs": [],
-						"execution_count": 29
+						"execution_count": null
 					},
 					{
 						"cell_type": "code",
@@ -550,7 +687,7 @@
 							"display(df1.groupBy(\"service_zone\").count())"
 						],
 						"outputs": [],
-						"execution_count": 32
+						"execution_count": null
 					},
 					{
 						"cell_type": "code",
@@ -570,7 +707,7 @@
 							"display(df.groupBy(\"service_zone\").count())"
 						],
 						"outputs": [],
-						"execution_count": 34
+						"execution_count": null
 					},
 					{
 						"cell_type": "code",
@@ -591,7 +728,7 @@
 							"display(df2)"
 						],
 						"outputs": [],
-						"execution_count": 50
+						"execution_count": null
 					},
 					{
 						"cell_type": "code",
@@ -613,7 +750,7 @@
 							"df.tail(num= 5)"
 						],
 						"outputs": [],
-						"execution_count": 9
+						"execution_count": null
 					},
 					{
 						"cell_type": "code",
@@ -635,7 +772,7 @@
 							"display(df.head(10))"
 						],
 						"outputs": [],
-						"execution_count": 11
+						"execution_count": null
 					},
 					{
 						"cell_type": "code",
@@ -655,7 +792,7 @@
 							"df2.write.csv(\"abfss://demo@vramakrishnan.dfs.core.windows.net/Boro\", header = True)"
 						],
 						"outputs": [],
-						"execution_count": 49
+						"execution_count": null
 					},
 					{
 						"cell_type": "code",
@@ -676,7 +813,7 @@
 							"# Filtering based on service zone and grouping by Borough\r\n",
 							"df2 = (df.filter(df.service_zone == 'Boro Zone') and df.groupBy(\"Borough\").count())\r\n",
 							"# writing df2 to filesystem \r\n",
-							"# df2.write.csv(\"abfss://demo@vramakrishnan.dfs.core.windows.net/Boro\", header = True)\r\n",
+							"df2.write.csv(\"abfss://demo@vramakrishnan.dfs.core.windows.net/Boro\", header = True)\r\n",
 							"\r\n",
 							"path = \"abfss://demo@vramakrishnan.dfs.core.windows.net/Boro\"\r\n",
 							"source_path = \"abfss://demo@vramakrishnan.dfs.core.windows.net/Boro/part-00000-c6731997-7962-4bc2-8370-d8b06644d9e5-c000.csv\"\r\n",
@@ -690,7 +827,7 @@
 							"mssparkutils.fs.rm(path, recurse=True)"
 						],
 						"outputs": [],
-						"execution_count": 3
+						"execution_count": null
 					},
 					{
 						"cell_type": "code",
@@ -715,7 +852,7 @@
 							"display(df3)"
 						],
 						"outputs": [],
-						"execution_count": 4
+						"execution_count": null
 					},
 					{
 						"cell_type": "code",
@@ -740,7 +877,7 @@
 							"df4.show()"
 						],
 						"outputs": [],
-						"execution_count": 5
+						"execution_count": null
 					},
 					{
 						"cell_type": "code",
@@ -756,14 +893,100 @@
 							}
 						},
 						"source": [
-							"# df5 = spark.read.format(\"com.crealytics.spark.excel\") \\\r\n",
-							"#     .option(\"header\", \"true\") \\\r\n",
-							"#     .option(\"inferSchema\", \"true\") \\\r\n",
-							"#     .load(\"abfss://demo@vramakrishnan.dfs.core.windows.net/taxi_zone_3.xlsx\")\r\n",
+							"df5 = spark.read.format(\"com.crealytics.spark.excel\") \\\r\n",
+							"    .option(\"header\", \"true\") \\\r\n",
+							"    .option(\"inferSchema\", \"true\") \\\r\n",
+							"    .load(\"abfss://demo@vramakrishnan.dfs.core.windows.net/taxi_zone_3.xlsx\")\r\n",
 							""
 						],
 						"outputs": [],
-						"execution_count": 8
+						"execution_count": null
+					},
+					{
+						"cell_type": "code",
+						"metadata": {
+							"jupyter": {
+								"source_hidden": false,
+								"outputs_hidden": false
+							},
+							"nteract": {
+								"transient": {
+									"deleting": false
+								}
+							}
+						},
+						"source": [
+							"from pyspark.context import SparkContext\r\n",
+							"from pyspark.sql import SparkSession\r\n",
+							"\r\n",
+							"spark = SparkSession.builder \\\r\n",
+							"    .appName(\"Read Excel in Synapse\") \\\r\n",
+							"    .config(\"spark.jars.packages\", \"com.crealytics:spark-excel_2.12:0.13.7\") \\\r\n",
+							"    .getOrCreate()\r\n",
+							"\r\n",
+							"# Read Excel file\r\n",
+							"df5 = spark.read.format(\"com.crealytics.spark.excel\") \\\r\n",
+							"    .option(\"header\", \"true\") \\\r\n",
+							"    .option(\"inferSchema\", \"true\") \\\r\n",
+							"    .option(\"dataAddress\", \"'Sheet1'!A1\") \\\r\n",
+							"    .load(\"abfss://demo@vramakrishnan.dfs.core.windows.net/taxi_zone_3.xlsx\")\r\n",
+							"\r\n",
+							"# Show the DataFrame\r\n",
+							"df5.show()"
+						],
+						"outputs": [],
+						"execution_count": 49
+					},
+					{
+						"cell_type": "code",
+						"metadata": {
+							"jupyter": {
+								"source_hidden": false,
+								"outputs_hidden": false
+							},
+							"nteract": {
+								"transient": {
+									"deleting": false
+								}
+							}
+						},
+						"source": [
+							"source_path = \"abfss://demo@vramakrishnan.dfs.core.windows.net/Boro\"\r\n",
+							"dest_path = \"abfss://demo@vramakrishnan.dfs.core.windows.net/Start/Borozone.csv\"\r\n",
+							"\r\n",
+							"file_list = mssparkutils.fs.ls(source_path)\r\n",
+							"\r\n",
+							"for file_info in file_list:\r\n",
+							"    file_path = file_info.path\r\n",
+							"\r\n",
+							"    if file_path.endswith(\".csv\"):\r\n",
+							"        mssparkutils.fs.cp(file_path,dest_path)\r\n",
+							"        mssparkutils.fs.rm(source_path,recurse=True)\r\n",
+							"    else:\r\n",
+							"        print(\"hi\")\r\n",
+							""
+						],
+						"outputs": [],
+						"execution_count": 100
+					},
+					{
+						"cell_type": "code",
+						"metadata": {
+							"jupyter": {
+								"source_hidden": false,
+								"outputs_hidden": false
+							},
+							"nteract": {
+								"transient": {
+									"deleting": false
+								}
+							}
+						},
+						"source": [
+							""
+						],
+						"outputs": [],
+						"execution_count": 105
 					}
 				]
 			},
@@ -776,7 +999,7 @@
 			"properties": {
 				"autoPause": {
 					"enabled": true,
-					"delayInMinutes": 15
+					"delayInMinutes": 5
 				},
 				"autoScale": {
 					"enabled": true,
@@ -788,7 +1011,7 @@
 				"nodeSizeFamily": "MemoryOptimized",
 				"sparkVersion": "3.4",
 				"isComputeIsolationEnabled": false,
-				"sessionLevelPackagesEnabled": false,
+				"sessionLevelPackagesEnabled": true,
 				"annotations": []
 			},
 			"dependsOn": [],
