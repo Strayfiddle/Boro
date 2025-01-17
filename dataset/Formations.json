@@ -9,6 +9,10 @@
 			"formations": {
 				"type": "string",
 				"defaultValue": "Formations"
+			},
+			"file_name": {
+				"type": "string",
+				"defaultValue": "formations_1718_premier_league.csv"
 			}
 		},
 		"annotations": [],
