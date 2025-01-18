@@ -18,7 +18,7 @@
 				"spark.dynamicAllocation.enabled": "false",
 				"spark.dynamicAllocation.minExecutors": "2",
 				"spark.dynamicAllocation.maxExecutors": "2",
-				"spark.autotune.trackingId": "21a88d06-785f-47fc-8591-cfb1285966fa"
+				"spark.autotune.trackingId": "77dd2347-18f7-400d-862a-a9cd7b01f521"
 			}
 		},
 		"metadata": {
@@ -62,7 +62,7 @@
 					"from pyspark.sql import SparkSession\n",
 					"from pathlib import Path"
 				],
-				"execution_count": 7
+				"execution_count": null
 			},
 			{
 				"cell_type": "code",
@@ -88,7 +88,7 @@
 					"selected_folder = \"Formations\"\r\n",
 					"file_name = \"\""
 				],
-				"execution_count": 14
+				"execution_count": null
 			},
 			{
 				"cell_type": "code",
@@ -121,7 +121,7 @@
 					"    #     lineups_df = spark.read.load(file_name,format = \"csv\",header = True)\r\n",
 					""
 				],
-				"execution_count": 25
+				"execution_count": null
 			}
 		]
 	}
